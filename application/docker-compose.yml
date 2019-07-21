@@ -1,0 +1,28 @@
+version: "3.3"
+
+services: 
+  web:
+    build: ./web
+    container_name: web
+    restart: always
+    environment:
+      - APP_NAME=DoisXT
+    expose:
+      - 8080
+  
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres!"
+    ports:
+      - "5434:5434"
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"

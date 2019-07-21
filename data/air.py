@@ -27,7 +27,7 @@ def search(departure_airport, arrival_airport):
     url = url.replace(':departure_airport:', departure_airport)
     url = url.replace(':arrival_airport:', arrival_airport)
     url = f'{url}{departure_date:%Y-%m-%d}'
-    
+
     resp = get(
         url,
         auth=(USER, PASSWORD)

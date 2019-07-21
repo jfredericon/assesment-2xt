@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://unpkg.com/@ionic/core@latest/css/ionic.bundle.css" rel="stylesheet">
+
+    <title>2xt</title>
+</head>
+
+<body>
+
+    <ion-content>
+
+        <ion-tabs>
+            <ion-tab tab="longer-distance">
+                <ion-nav>
+                    <ion-content>
+                        <ion-grid fixed="true">
+                            <ion-card color="primary">
+                                <ion-row class="ion-text-center ion-text-uppercase">
+                                    <ion-col>
+                                        departure
+                                    </ion-col>
+                                    <ion-col>
+                                        arrival
+                                    </ion-col>
+                                    <ion-col>
+                                        distance
+                                    </ion-col>
+                                </ion-row>
+                            </ion-card>
+                            {% for item in range(30) %}
+                            <ion-card color="light">
+                                <ion-row class="ion-text-center">
+                                    <ion-col>
+                                        departure
+                                    </ion-col>
+                                    <ion-col>
+                                        arrival
+                                    </ion-col>
+                                    <ion-col>
+                                        distance
+                                    </ion-col>
+                                </ion-row>
+                            </ion-card>
+                            {% endfor %}
+                        </ion-grid>
+                    </ion-content>
+                </ion-nav>
+            </ion-tab>
+
+            <ion-tab tab="longer-duration">
+                <ion-nav>
+                    <ion-content>
+                        <ion-grid fixed="true">
+                            <ion-card color="primary">
+                                <ion-row class="ion-text-center ion-text-uppercase">
+                                    <ion-col>
+                                        departure
+                                    </ion-col>
+                                    <ion-col>
+                                        arrival
+                                    </ion-col>
+                                    <ion-col>
+                                        duration
+                                    </ion-col>
+                                </ion-row>
+                            </ion-card>
+                            {% for item in range(30) %}
+                            <ion-card color="light">
+                                <ion-row class="ion-text-center">
+                                    <ion-col>
+                                        departure
+                                    </ion-col>
+                                    <ion-col>
+                                        arrival
+                                    </ion-col>
+                                    <ion-col>
+                                        duration
+                                    </ion-col>
+                                </ion-row>
+                            </ion-card>
+                            {% endfor %}
+                        </ion-grid>
+                    </ion-content>
+                </ion-nav>
+            </ion-tab>
+
+            <ion-tab tab="departure-airports">
+                <ion-nav>
+                    <ion-content>
+                        <ion-grid fixed="true">
+                            <ion-card color="primary">
+                                <ion-row class="ion-text-center ion-text-uppercase">
+                                    <ion-col>
+                                        airport
+                                    </ion-col>
+                                    <ion-col>
+                                        farthest
+                                    </ion-col>
+                                    <ion-col>
+                                        nearest
+                                    </ion-col>
+                                </ion-row>
+                            </ion-card>
+                            {% for item in range(125) %}
+                            <ion-card color="light">
+                                <ion-row class="ion-text-center">
+                                    <ion-col>
+                                        airport
+                                    </ion-col>
+                                    <ion-col>
+                                        farthest
+                                    </ion-col>
+                                    <ion-col>
+                                        nearest
+                                    </ion-col>
+                                </ion-row>
+                            </ion-card>
+                            {% endfor %}
+                        </ion-grid>
+                    </ion-content>
+                </ion-nav>
+            </ion-tab>
+
+            <ion-tab-bar slot="top">
+                <ion-tab-button tab="longer-distance" color="primary">
+                    <ion-label class="ion-text-uppercase">Longer distance </ion-label>
+                </ion-tab-button>
+
+                <ion-tab-button tab="longer-duration" color="primary">
+                    <ion-label class="ion-text-uppercase">Longer duration</ion-label>
+                </ion-tab-button>
+
+                <ion-tab-button tab="departure-airports" color="primary">
+                    <ion-label class="ion-text-uppercase">Departure airports</ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+
+        </ion-tabs>
+    </ion-content>
+
+
+    <script src="https://unpkg.com/@ionic/core@latest/dist/ionic.js"></script>
+    <script src="https://unpkg.com/ionicons@latest/dist/ionicons.js"></script>
+</body>
+
+</html>
