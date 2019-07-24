@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from math import radians, cos, sin, asin, sqrt
 from decimal import Decimal
 

@@ -1,19 +1,24 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime, timedelta
 from itertools import combinations
+from dotenv import load_dotenv
 from requests import get
+import os
 
+load_dotenv()
 
-USER = 'josefrederico'
-PASSWORD = 'szqwoC'
-BASE_URL = 'http://stub.2xt.com.br/air/'
-API_KEY = 'pCuwoCxInvjSutnq9Dp7WpKaqrHqOzvw'
+API_USER = os.getenv('API_USER')
+API_PASSWORD = os.getenv('API_PASSWORD')
+API_BASE_URL = os.getenv('API_BASE_URL')
+API_KEY = os.getenv('API_KEY')
 
 
 def airports():
-    url = f'{BASE_URL}airports/pCuwoCxInvjSutnq9Dp7WpKaqrHqOzvw'
+    url = f'{API_BASE_URL}airports/pCuwoCxInvjSutnq9Dp7WpKaqrHqOzvw'
     resp = get(
         url,
-        auth=(USER, PASSWORD)
+        auth=(API_USER, API_PASSWORD)
     )
 
     return resp.json()
@@ -22,7 +27,7 @@ def airports():
 def search(departure_airport, arrival_airport):
     departure_date = datetime.now() + timedelta(days=40)
 
-    url = f'{BASE_URL}search/{API_KEY}/:departure_airport:/:arrival_airport:/'
+    url = f'{API_BASE_URL}search/{API_KEY}/:departure_airport:/:arrival_airport:/'
 
     url = url.replace(':departure_airport:', departure_airport)
     url = url.replace(':arrival_airport:', arrival_airport)
@@ -30,7 +35,7 @@ def search(departure_airport, arrival_airport):
 
     resp = get(
         url,
-        auth=(USER, PASSWORD)
+        auth=(API_USER, API_PASSWORD)
     )
 
     return {
