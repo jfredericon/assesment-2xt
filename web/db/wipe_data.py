@@ -22,10 +22,10 @@ def run():
 
         cursor = connection.cursor()
         truncate_table_query = [
-            f'TRUNCATE TABLE aircraft',
-            f'TRUNCATE TABLE flight_metrics',
-            f'TRUNCATE TABLE flight CASCADE',
-            f'TRUNCATE TABLE airport Cascade'
+            f'TRUNCATE TABLE aircraft RESTART IDENTITY',
+            f'TRUNCATE TABLE flight_metrics RESTART IDENTITY',
+            f'TRUNCATE TABLE flight RESTART IDENTITY CASCADE',
+            f'TRUNCATE TABLE airport RESTART IDENTITY CASCADE'
         ]
 
         for query in truncate_table_query:

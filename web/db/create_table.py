@@ -38,15 +38,14 @@ def run():
             CREATE TABLE IF NOT EXISTS flight
             (
                 id SERIAL PRIMARY KEY,
-                airport_from VARCHAR(3) NOT NULL
+                departure_airport VARCHAR(3) NOT NULL
                  REFERENCES airport(iata),
-                airport_to VARCHAR(3) NOT NULL
+                arrival_airport VARCHAR(3) NOT NULL
                  REFERENCES airport(iata),
                 aircraft_id VARCHAR NOT NULL,
-                departure_date DATE NOT NULL,
                 departure_time TIMESTAMP NOT NULL,
                 arrival_time TIMESTAMP NOT NULL,
-                farel_price DOUBLE PRECISION NOT NULL,
+                fare_price DOUBLE PRECISION NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 updated_at TIMESTAMP NOT NULL
             );
@@ -69,7 +68,7 @@ def run():
                  REFERENCES flight(id),
                 url_api TEXT NOT NULL,
                 distance DOUBLE PRECISION NOT NULL,
-                low_value VARCHAR NOT NULL,
+                lowest_value DOUBLE PRECISION NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 updated_at TIMESTAMP NOT NULL
             );

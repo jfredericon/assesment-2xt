@@ -24,9 +24,7 @@ def airports():
     return resp.json()
 
 
-def search(departure_airport, arrival_airport):
-    departure_date = datetime.now() + timedelta(days=40)
-
+def search(departure_airport, arrival_airport, departure_date):
     url = f'{API_BASE_URL}search/{API_KEY}/:departure_airport:/:arrival_airport:/'
 
     url = url.replace(':departure_airport:', departure_airport)
