@@ -1,6 +1,5 @@
 from db import create_database, create_table, wipe_data, wipe_all
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
 from utils import operations
 from decimal import Decimal
 from data import air
@@ -8,8 +7,6 @@ import psycopg2
 import click
 import sys
 import os
-
-load_dotenv()
 
 DATABASE_USER = os.getenv('DATABASE_USER')
 DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')

@@ -1,28 +1,51 @@
-version: "3.3"
+version: "3.5"
 
-services: 
-  web:
-    build: ./web
-    container_name: web
+services:
+
+  flask:
+    build: ./flask
+    container_name: assestment-2xt-flask
     restart: always
     environment:
-      
+      DATABASE_USER: "postgres" 
+      DATABASE_PASSWORD: "postgres!"
+      DATABASE_HOST: "postgres"
+      DATABASE_PORT: 5432
+      DATABASE_NAME: "doisxt"
     expose:
       - 8080
-  
+    depends_on:
+      - postgres
+    networks:
+      main:
+        aliases: 
+          - flask
+
   postgres:
     image: postgres
+    container_name: assestment-2xt-postgres
     environment:
-      POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres!"
     ports:
-      - "5434:5434"
+      - "5432:5432"
     volumes:
-      - ./postgres/data:/var/lib/postgresql/data
-    
+      - ./postgres/data:/var/lib/postgresql/data 
+    networks:
+      main:
+        aliases: 
+          - postgres
+
   nginx:
     build: ./nginx
-    container_name: nginx
+    container_name: assestment-2xt-nginx
     restart: always
     ports:
       - "80:80"
+    networks:
+      main:
+        aliases: 
+          - nginx
+
+networks:
+  main:
+    driver: bridge

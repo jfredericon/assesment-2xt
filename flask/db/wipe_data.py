@@ -1,5 +1,5 @@
-import psycopg2
 from dotenv import load_dotenv
+import psycopg2
 import os
 
 load_dotenv()
@@ -17,21 +17,29 @@ def run():
         connection = psycopg2.connect(user=DATABASE_USER,
                                       password=DATABASE_PASSWORD,
                                       host=DATABASE_HOST,
-                                      port=DATABASE_PORT)
+                                      port=DATABASE_PORT,
+                                      database=DATABASE_NAME)
 
-        connection.autocommit = True
         cursor = connection.cursor()
-        create_database_query = f'CREATE DATABASE {DATABASE_NAME}'
-        cursor.execute(create_database_query)
+        truncate_table_query = [
+            f'TRUNCATE TABLE aircraft RESTART IDENTITY',
+            f'TRUNCATE TABLE flight_metrics RESTART IDENTITY',
+            f'TRUNCATE TABLE flight RESTART IDENTITY CASCADE',
+            f'TRUNCATE TABLE airport RESTART IDENTITY CASCADE'
+        ]
+
+        for query in truncate_table_query:
+            cursor.execute(query)
+
+        connection.commit()
 
     except (Exception) as error:
-        raise Exception(
-            f'Error while create database \n{str(error)}')
+        raise Exception(f'Error while erase data \n{str(error)}')
     finally:
         if(connection):
             cursor.close()
             connection.close()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     run()

@@ -1,8 +1,14 @@
-all:
-	make build && make run 
+all: 
+	make build && make run
+
+run:
+	docker-compose up -d
 
 build:
 	docker-compose build
 
-run: 
-	docker-compose up
+stop:
+	docker-compose stop
+
+cli: 
+	docker exec -it assestment-2xt-flask /bin/bash

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from datetime import datetime, timedelta
 from itertools import combinations
 from dotenv import load_dotenv
