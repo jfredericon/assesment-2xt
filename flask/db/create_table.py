@@ -35,6 +35,16 @@ def run():
             );
         ''',
             '''
+            CREATE TABLE IF NOT EXISTS aircraft
+            (
+                id SERIAL PRIMARY KEY,
+                aircraft_model VARCHAR NOT NULL,
+                aircraft_manufacturer VARCHAR NOT NULL,
+                created_at TIMESTAMP NOT NULL,
+                updated_at TIMESTAMP NOT NULL
+            );
+        ''',
+            '''
             CREATE TABLE IF NOT EXISTS flight
             (
                 id SERIAL PRIMARY KEY,
@@ -42,20 +52,13 @@ def run():
                  REFERENCES airport(iata),
                 arrival_airport VARCHAR(3) NOT NULL
                  REFERENCES airport(iata),
-                aircraft_id VARCHAR NOT NULL,
+                aircraft_id INTEGER NOT NULL
+                 REFERENCES aircraft(id),
                 departure_time TIMESTAMP NOT NULL,
                 arrival_time TIMESTAMP NOT NULL,
                 fare_price DOUBLE PRECISION NOT NULL,
-                created_at TIMESTAMP NOT NULL,
-                updated_at TIMESTAMP NOT NULL
-            );
-        ''',
-            '''
-            CREATE TABLE IF NOT EXISTS aircraft
-            (
-                id SERIAL PRIMARY KEY,
-                aircraft_model VARCHAR NOT NULL,
-                aircraft_manufacturer VARCHAR NOT NULL,
+                average_speed DOUBLE PRECISION NOT NULL,
+                price_per_km DOUBLE PRECISION NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 updated_at TIMESTAMP NOT NULL
             );

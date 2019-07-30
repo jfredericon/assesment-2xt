@@ -63,6 +63,7 @@ def wipeall():
 
 @main.command('data-only', help='Get data')
 def dataonly():
+    connection = None
     try:
         connection = psycopg2.connect(user=DATABASE_USER,
                                       password=DATABASE_PASSWORD,
@@ -179,6 +180,25 @@ def dataonly():
                 flight_id = cursor.fetchone()
 
                 if(flight_id is None):
+                    departure_time = datetime.strptime(
+                        model['departure_time'], '%Y-%m-%dT%H:%M:%S'
+                    )
+
+                    arrival_time = datetime.strptime(
+                        model['arrival_time'], '%Y-%m-%dT%H:%M:%S'
+                    )
+
+                    flight_time_decimal = operations.flight_time(
+                        departure_time, arrival_time)
+
+                    average_speed = operations.average_speed(
+                        distance, flight_time_decimal)
+
+                    fare_price = model['fare_price']
+
+                    price_per_km = operations.price_per_km(
+                        fare_price, distance)
+
                     sql = f"INSERT INTO flight \
                         (departure_airport, \
                         arrival_airport, \
@@ -186,6 +206,8 @@ def dataonly():
                         departure_time, \
                         arrival_time, \
                         fare_price, \
+                        average_speed,\
+                        price_per_km, \
                         created_at, updated_at) \
                         VALUES('{departure_airport}', \
                             '{arrival_airport}', \
@@ -193,6 +215,8 @@ def dataonly():
                             '{model['departure_time']}', \
                             '{model['arrival_time']}', \
                             {model['fare_price']}, \
+                            {average_speed}, \
+                            {price_per_km}, \
                             CURRENT_TIMESTAMP, \
                             CURRENT_TIMESTAMP) RETURNING id"
 
@@ -201,25 +225,6 @@ def dataonly():
 
                     if(flight_id is not None):
                         flight_id = flight_id[0]
-
-                        departure_time = datetime.strptime(
-                            model['departure_time'], '%Y-%m-%dT%H:%M:%S'
-                        )
-
-                        arrival_time = datetime.strptime(
-                            model['arrival_time'], '%Y-%m-%dT%H:%M:%S'
-                        )
-
-                        flight_time = operations.flight_time(
-                            departure_time, arrival_time)
-
-                        average_speed = operations.average_speed(
-                            distance, flight_time)
-
-                        fare_price = model['fare_price']
-
-                        price_per_km = operations.price_per_km(
-                            fare_price, distance)
 
                         if(sorted_list_aircrafts.index(model) == 0):
                             sql = f"INSERT INTO flight_metrics\
