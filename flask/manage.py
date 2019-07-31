@@ -103,10 +103,9 @@ def dataonly():
         click.echo('-> Proccessing metrics')
         departure_date = datetime.now() + timedelta(days=40)
 
-        # comb = comb[:20]
         sql = f"SELECT  departure_airport, arrival_airport FROM flight \
-            WHERE date(departure_time) = '{departure_date:%Y-%m-%d}' \
-            ORDER BY date(departure_time) DESC, id DESC LIMIT 1"
+            WHERE departure_date = '{departure_date:%Y-%m-%d}' \
+            ORDER BY departure_date DESC, id DESC LIMIT 1"
 
         cursor.execute(sql)
         flight = cursor.fetchone()
@@ -115,7 +114,6 @@ def dataonly():
             if(flight in comb):
                 index = comb.index(flight) + 1
                 comb = comb[index:]
-                # total_comb = len(comb)
                 increment_current += index
 
         for item in comb:
@@ -143,7 +141,38 @@ def dataonly():
                 resp['data']['options'], key=lambda item: item['fare_price']
             )
 
+            sql = f"SELECT id FROM flight\
+                    WHERE departure_airport = '{departure_airport}' \
+                    AND arrival_airport = '{arrival_airport}' \
+                    AND departure_date = '{departure_date:%Y-%m-%d}'"
+
+            cursor.execute(sql)
+            flight_id = cursor.fetchone()
+
+            if(flight_id is None):
+                sql = f"INSERT INTO flight \
+                        (departure_airport, \
+                        arrival_airport, \
+                        departure_date, \
+                        url_api, \
+                        distance, \
+                        created_at, updated_at) \
+                        VALUES('{departure_airport}', \
+                            '{arrival_airport}', \
+                            '{departure_date:%Y-%m-%d}', \
+                            '{resp['url']}', \
+                            '{distance}', \
+                            CURRENT_TIMESTAMP, \
+                            CURRENT_TIMESTAMP) RETURNING id"
+
+                cursor.execute(sql)
+                flight_id = cursor.fetchone()
+            
+            if(flight_id is not None):
+                flight_id = flight_id[0]
+# 
             for model in sorted_list_aircrafts:
+
                 sql = f"SELECT id FROM aircraft \
                     WHERE aircraft_model = \
                     '{model['aircraft']['model']}' \
@@ -152,10 +181,8 @@ def dataonly():
 
                 cursor.execute(sql)
                 aircraft_id = cursor.fetchone()
-
-                if(aircraft_id is not None):
-                    aircraft_id = aircraft_id[0]
-                else:
+# 
+                if(aircraft_id is None):
                     sql = f"INSERT INTO aircraft \
                         (aircraft_model, aircraft_manufacturer, created_at, \
                         updated_at) VALUES( \
@@ -167,88 +194,61 @@ def dataonly():
 
                     cursor.execute(sql)
                     aircraft_id = cursor.fetchone()
-                    if(aircraft_id is not None):
-                        aircraft_id = aircraft_id[0]
+# 
+                if(aircraft_id is not None):
+                    aircraft_id = aircraft_id[0]
+# 
+                departure_time = datetime.strptime(
+                    model['departure_time'], '%Y-%m-%dT%H:%M:%S'
+                )
 
-                sql = f"SELECT id FROM flight\
-                    WHERE departure_airport = '{departure_airport}' \
-                    AND arrival_airport = '{arrival_airport}' \
-                    AND departure_time = '{model['departure_time']}' \
-                    AND aircraft_id = '{aircraft_id}'"
+                arrival_time = datetime.strptime(
+                    model['arrival_time'], '%Y-%m-%dT%H:%M:%S'
+                )
 
-                cursor.execute(sql)
-                flight_id = cursor.fetchone()
+                flight_time = operations.flight_time(
+                    departure_time, arrival_time)
 
-                if(flight_id is None):
-                    departure_time = datetime.strptime(
-                        model['departure_time'], '%Y-%m-%dT%H:%M:%S'
-                    )
+                average_speed = operations.average_speed(
+                    distance, flight_time)
 
-                    arrival_time = datetime.strptime(
-                        model['arrival_time'], '%Y-%m-%dT%H:%M:%S'
-                    )
+                fare_price = model['fare_price']
 
-                    flight_time_decimal = operations.flight_time(
-                        departure_time, arrival_time)
+                price_per_km = operations.price_per_km(
+                    fare_price, distance)
+# 
+                if(flight_id is not None):# 
+                    sql = f"SELECT id FROM flight_metrics \
+                        WHERE flight_id = \
+                        {flight_id} \
+                        AND aircraft_id = \
+                        {aircraft_id}"
 
-                    average_speed = operations.average_speed(
-                        distance, flight_time_decimal)
+                    cursor.execute(sql)
+                    metrics_id = cursor.fetchone()
 
-                    fare_price = model['fare_price']
-
-                    price_per_km = operations.price_per_km(
-                        fare_price, distance)
-
-                    sql = f"INSERT INTO flight \
-                        (departure_airport, \
-                        arrival_airport, \
-                        aircraft_id, \
-                        departure_time, \
-                        arrival_time, \
-                        fare_price, \
-                        average_speed,\
-                        price_per_km, \
-                        created_at, updated_at) \
-                        VALUES('{departure_airport}', \
-                            '{arrival_airport}', \
+                    if(metrics_id is None):
+                        sql = f"INSERT INTO flight_metrics\
+                            (flight_id, \
+                            aircraft_id, \
+                            departure_time, \
+                            arrival_time, \
+                            fare_price, \
+                            average_speed,\
+                            price_per_km, \
+                            lowest_value, \
+                            created_at, updated_at) \
+                            VALUES ('{flight_id}', \
                             '{aircraft_id}', \
                             '{model['departure_time']}', \
                             '{model['arrival_time']}', \
                             {model['fare_price']}, \
                             {average_speed}, \
                             {price_per_km}, \
-                            CURRENT_TIMESTAMP, \
-                            CURRENT_TIMESTAMP) RETURNING id"
+                            {sorted_list_aircrafts.index(model) == 0}, \
+                            CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
 
-                    cursor.execute(sql)
-                    flight_id = cursor.fetchone()
-
-                    if(flight_id is not None):
-                        flight_id = flight_id[0]
-
-                        if(sorted_list_aircrafts.index(model) == 0):
-                            sql = f"INSERT INTO flight_metrics\
-                                (flight_id, url_api, distance, \
-                                lowest_value, created_at, updated_at) \
-                                VALUES ('{flight_id}', '{resp['url']}', \
-                                '{distance}', '{fare_price}', \
-                                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
-
-                            cursor.execute(sql)
-
-                        # print(
-                        #     {
-                        #         'from': from_city['city'],
-                        #         'to': to_city['city'],
-                        #         'distance': f'{distance:.2f} km',
-                        #         'departure_time': f'{departure_time:%d-%m-%Y %H:%M:%S}',
-                        #         'arrival_time': f'{arrival_time:%d-%m-%Y %H:%M:%S}',
-                        #         'flight_time': f'{flight_time:.2f} h',
-                        #         'average_speed': f'{average_speed:.2f} km/h',
-                        #         'fare_price': f'R$ {fare_price}',
-                        #         'price_per_km': f'R$ {price_per_km:.2f}'
-                        #     }
-                        # )
+                        cursor.execute(sql)
 
         click.secho('-> Proccessing metrics successfully!', fg='green')
     except (Exception) as error:

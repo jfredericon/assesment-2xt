@@ -24,27 +24,36 @@
                             <ion-card color="primary">
                                 <ion-row class="ion-text-center ion-text-uppercase">
                                     <ion-col>
-                                        departure
+                                        Partida
                                     </ion-col>
                                     <ion-col>
-                                        arrival
+                                        Destino
                                     </ion-col>
                                     <ion-col>
-                                        distance
+                                        Distância
                                     </ion-col>
                                 </ion-row>
                             </ion-card>
-                            {% for item in range(30) %}
+                            {% for item in more_distant %}
                             <ion-card color="light">
-                                <ion-row class="ion-text-center">
+                                <ion-row>
                                     <ion-col>
-                                        departure
+                                        <ion-item lines="none">
+                                            <ion-icon name="airplane" slot="start"></ion-icon>
+                                            <ion-label>{{ item[0] }}</ion-label>
+                                        </ion-item>
                                     </ion-col>
                                     <ion-col>
-                                        arrival
+                                        <ion-item lines="none">
+                                            <ion-icon name="airplane" slot="start"></ion-icon>
+                                            <ion-label>{{ item[1] }}</ion-label>
+                                        </ion-item>
                                     </ion-col>
                                     <ion-col>
-                                        distance
+                                        <ion-item lines="none">
+                                            <ion-icon name="map" slot="start"></ion-icon>
+                                            <ion-label>{{ item[2] }} Km</ion-label>
+                                        </ion-item>
                                     </ion-col>
                                 </ion-row>
                             </ion-card>
@@ -61,27 +70,54 @@
                             <ion-card color="primary">
                                 <ion-row class="ion-text-center ion-text-uppercase">
                                     <ion-col>
-                                        departure
+                                        Partida
                                     </ion-col>
                                     <ion-col>
-                                        arrival
+                                        Destino
                                     </ion-col>
                                     <ion-col>
-                                        duration
+                                        Duração
+                                    </ion-col>
+                                    <ion-col>
+                                        Aeronave
+                                    </ion-col>
+                                    <ion-col>
+                                        Fabricante
                                     </ion-col>
                                 </ion-row>
                             </ion-card>
-                            {% for item in range(30) %}
+                            {% for item in longer_duration %}
                             <ion-card color="light">
-                                <ion-row class="ion-text-center">
+                                <ion-row>
                                     <ion-col>
-                                        departure
+                                        <ion-item lines="none">
+                                            <ion-icon name="airplane" slot="start"></ion-icon>
+                                            <ion-label>{{ item[0] }}</ion-label>
+                                        </ion-item>
                                     </ion-col>
                                     <ion-col>
-                                        arrival
+                                        <ion-item lines="none">
+                                            <ion-icon name="airplane" slot="start"></ion-icon>
+                                            <ion-label>{{ item[1] }}</ion-label>
+                                        </ion-item>
                                     </ion-col>
                                     <ion-col>
-                                        duration
+                                        <ion-item lines="none">
+                                            <ion-icon name="time" slot="start"></ion-icon>
+                                            <ion-label>{{ item[2] }}H</ion-label>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item lines="none">
+                                            <ion-icon name="jet" slot="start"></ion-icon>
+                                            <ion-label>{{ item[3] }}</ion-label>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item lines="none">
+                                            <ion-icon name="construct" slot="start"></ion-icon>
+                                            <ion-label>{{ item[4] }}</ion-label>
+                                        </ion-item>
                                     </ion-col>
                                 </ion-row>
                             </ion-card>
@@ -98,27 +134,40 @@
                             <ion-card color="primary">
                                 <ion-row class="ion-text-center ion-text-uppercase">
                                     <ion-col>
-                                        airport
+                                        Aeroporto
                                     </ion-col>
                                     <ion-col>
-                                        farthest
+                                        Destino mais distante
                                     </ion-col>
                                     <ion-col>
-                                        nearest
+                                        Destino mais próximo
                                     </ion-col>
                                 </ion-row>
                             </ion-card>
-                            {% for item in range(125) %}
+                            {% for item in departure_airports %}
                             <ion-card color="light">
-                                <ion-row class="ion-text-center">
+                                <ion-row>
                                     <ion-col>
-                                        airport
+                                        <ion-item lines="none">
+                                            <ion-icon name="airplane" slot="start"></ion-icon>
+                                            <ion-label>{{ item[0] }}</ion-label>
+                                        </ion-item>
                                     </ion-col>
                                     <ion-col>
-                                        farthest
+                                        <ion-item lines="none">
+                                            <ion-icon name="airplane" slot="start"></ion-icon>
+                                            <ion-label slot="start">{{ item[1] }}</ion-label>
+                                            <ion-icon name="map" slot="start"></ion-icon>
+                                            <ion-label>{{ item[2] }} Km</ion-label>
+                                        </ion-item>
                                     </ion-col>
                                     <ion-col>
-                                        nearest
+                                        <ion-item lines="none">
+                                            <ion-icon name="airplane" slot="start"></ion-icon>
+                                            <ion-label slot="start">{{ item[3] }}</ion-label>
+                                            <ion-icon name="map" slot="start"></ion-icon>
+                                            <ion-label>{{ item[4] }} Km</ion-label>
+                                        </ion-item>
                                     </ion-col>
                                 </ion-row>
                             </ion-card>
@@ -128,17 +177,39 @@
                 </ion-nav>
             </ion-tab>
 
+            <ion-tab tab="state_airposts">
+                <ion-nav>
+                    <ion-content>
+                        <ion-grid fixed="true">
+                            <ion-card>
+                                <ion-card-content>
+                                    <ion-item lines="none">
+                                        <ion-icon name="globe" slot="start" size="large"></ion-icon>
+                                        <ion-label>{{ state_with_more_airports[0] }} - Quantidade:
+                                            {{ state_with_more_airports[1] }}</ion-label>
+                                    </ion-item>
+                                </ion-card-content>
+                            </ion-card>
+                        </ion-grid>
+                    </ion-content>
+                </ion-nav>
+            </ion-tab>
+
             <ion-tab-bar slot="top">
                 <ion-tab-button tab="longer-distance" color="primary">
-                    <ion-label class="ion-text-uppercase">Longer distance </ion-label>
+                    <ion-label class="ion-text-uppercase">Viagens mais longas em Km </ion-label>
                 </ion-tab-button>
 
                 <ion-tab-button tab="longer-duration" color="primary">
-                    <ion-label class="ion-text-uppercase">Longer duration</ion-label>
+                    <ion-label class="ion-text-uppercase">Viagens mais longas em duração</ion-label>
                 </ion-tab-button>
 
                 <ion-tab-button tab="departure-airports" color="primary">
-                    <ion-label class="ion-text-uppercase">Departure airports</ion-label>
+                    <ion-label class="ion-text-uppercase">Aeroportos de partida</ion-label>
+                </ion-tab-button>
+
+                <ion-tab-button tab="state_airposts" color="primary">
+                    <ion-label class="ion-text-uppercase">Estado com mais aeroportos</ion-label>
                 </ion-tab-button>
             </ion-tab-bar>
 
@@ -146,8 +217,11 @@
     </ion-content>
 
 
-    <script src="https://unpkg.com/@ionic/core@latest/dist/ionic.js"></script>
-    <script src="https://unpkg.com/ionicons@latest/dist/ionicons.js"></script>
+    <script type="module" src="https://unpkg.com/@ionic/core@latest/dist/ionic/ionic.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/@ionic/core@latest/dist/ionic/ionic.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@latest/dist/ionicons/ionicons.js"></script>
+
 </body>
 
 </html>

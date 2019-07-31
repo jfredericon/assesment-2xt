@@ -52,13 +52,9 @@ def run():
                  REFERENCES airport(iata),
                 arrival_airport VARCHAR(3) NOT NULL
                  REFERENCES airport(iata),
-                aircraft_id INTEGER NOT NULL
-                 REFERENCES aircraft(id),
-                departure_time TIMESTAMP NOT NULL,
-                arrival_time TIMESTAMP NOT NULL,
-                fare_price DOUBLE PRECISION NOT NULL,
-                average_speed DOUBLE PRECISION NOT NULL,
-                price_per_km DOUBLE PRECISION NOT NULL,
+                departure_date DATE NOT NULL,
+                url_api TEXT NOT NULL,
+                distance DOUBLE PRECISION NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 updated_at TIMESTAMP NOT NULL
             );
@@ -69,9 +65,14 @@ def run():
                 id SERIAL PRIMARY KEY,
                 flight_id INTEGER NOT NULL
                  REFERENCES flight(id),
-                url_api TEXT NOT NULL,
-                distance DOUBLE PRECISION NOT NULL,
-                lowest_value DOUBLE PRECISION NOT NULL,
+                aircraft_id INTEGER NOT NULL
+                 REFERENCES aircraft(id),
+                departure_time TIMESTAMP NOT NULL,
+                arrival_time TIMESTAMP NOT NULL,
+                fare_price DOUBLE PRECISION NOT NULL,
+                average_speed DOUBLE PRECISION NOT NULL,
+                price_per_km DOUBLE PRECISION NOT NULL,
+                lowest_value BOOLEAN,
                 created_at TIMESTAMP NOT NULL,
                 updated_at TIMESTAMP NOT NULL
             );
